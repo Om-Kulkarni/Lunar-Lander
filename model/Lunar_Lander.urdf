@@ -1,0 +1,36 @@
+<robot name="Lunar_Lander">
+
+################################################################################
+# LINKS                                                                        #
+################################################################################
+
+  ##### base_link ##############################################################
+
+  <link name="base_link">
+
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://model/Lunar_Lander.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+      <material name="gray">
+        <color rgba="128 128 128 1.0"/>
+      </material>
+    </visual>
+
+    <inertial>
+      <mass value="10.00"/>
+      <inertia ixx="3.698e-2" ixy="1.57e-09" ixz="3.16276e-09" iyy="3.698e-2" iyz="5.295e-08" izz="1.9841e-2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </inertial>
+
+    <collision>
+      <geometry>
+        <mesh filename="package://model/Lunar_Lander.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+
+  </link>
+
+</robot>
