@@ -39,7 +39,7 @@ p.loadURDF(os.path.join(pybullet_data.getDataPath(), "plane.urdf"))
 p.setGravity(0, 0, -9.8)
 
 urdf_path = r"Lunar_Lander.urdf"
-robotID = p.loadURDF(urdf_path, useFixedBase=True, basePosition=[0, 0, 0.5])
+robotID = p.loadURDF(urdf_path, basePosition=[0, 0, 0.5])
 
 # Final POSITION
 # gemId = p.loadURDF("duck_vhacd.urdf", [
