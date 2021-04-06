@@ -125,10 +125,10 @@ for i in range(DURATION):
     torque = (np.array([T_x, T_y, T_z]))
 
     p.applyExternalForce(objectUniqueId=robotID, linkIndex=-1,
-                         forceObj=force, posObj=robotPos, flags=p.WORLD_FRAME) #Might have to chance to link frame
+                         forceObj=force, posObj=robotPos, flags=p.LINK_FRAME) #Might have to chance to link frame
 
     p.applyExternalTorque(objectUniqueId=robotID, linkIndex=-1,
-                        torqueObj=torque, flags=p.WORLD_FRAME) #Might have to change to link frame
+                        torqueObj=torque, flags=p.LINK_FRAME) #Might have to change to link frame
 
     print('Applied force vector = {}'.format(force))
     print('Applied force magnitude = {}'.format(np.linalg.norm(force)))
