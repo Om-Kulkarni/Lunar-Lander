@@ -6,10 +6,12 @@ class lmEnv(gym.Env):
     metadata = {'render.modes': ['human']}
 
     def __init__(self):
-        self.action_space = gym.spaces.box.Box(
-            low = np.array()
-            high = np.array()
-        )
+        #self.action_space = gym.spaces.box.Box(
+        #    low = np.array()
+        #    high = np.array()
+        #)
+
+        self.action_space = gym.spaces.multi_binary.MultiBinary(17)
 
         self.action_space = gym.spaces.box.Box(
             low = np.array()
