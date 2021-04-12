@@ -1,6 +1,7 @@
 import pybullet as p
 import os
 import math
+import numpy as np 
 
 class lunarModule:
 
@@ -25,15 +26,59 @@ class lunarModule:
         self.duration = 1000.0
 
         # lengths of lm and angles of side thrusters
-        self.alpha = 27.122 * math.pi/180
-        self.l = 125.998
-        self.r = 180.20 / 2
+        #self.alpha = 27.122 * math.pi/180
+        #self.l = 125.998
+        #self.r = 180.20 / 2
+        self.sa = 0.4559
+        self.ca = 0.8900
+        self.rt = 125.988 #in mm
+        self.ht = 180.2/2 #in mm
 
-        # thrsuters to force matrix
-        self.ttof = np.array()
+        # thrusters to force matrix
+        self.ttof = np.array(
+            [
+                [0, self.sa*self.sideThrust, -self.ca*self.sideThrust], 
+                [0, -self.sa*self.sideThrust, -self.ca*self.sideThrust], 
+                [self.sa*self.sideThrust, 0, -self.ca*self.sideThrust], 
+                [-self.sa*self.sideThrust, 0, -self.ca*self.sideThrust], 
+                [0, -self.sa*self.sideThrust, -self.ca*self.sideThrust], 
+                [0, self.sa*self.sideThrust, -self.ca*self.sideThrust], 
+                [-self.sa*self.sideThrust, 0, -self.ca*self.sideThrust], 
+                [self.sa*self.sideThrust, 0, -self.ca*self.sideThrust], 
+                [0, self.sa*self.sideThrust, self.ca*self.sideThrust], 
+                [0, -self.sa*self.sideThrust, self.ca*self.sideThrust], 
+                [self.sa*self.sideThrust, 0, self.ca*self.sideThrust], 
+                [-self.sa*self.sideThrust, 0, self.ca*self.sideThrust], 
+                [0, -self.sa*self.sideThrust, self.ca*self.sideThrust], 
+                [0, self.sa*self.sideThrust, self.ca*self.sideThrust], 
+                [-self.sa*self.sideThrust, 0, self.ca*self.sideThrust], 
+                [self.sa*self.sideThrust, 0, self.ca*self.sideThrust], 
+                [0, 0, self.mainThrust] 
+            ]
+        )
 
         # thrusters to torque matrix
-        self.ttot = np.array()
+        self.ttot = np.array(
+            [
+                [-self.sa*self.ht*self.sideThrust, self.ca*self.ht*self.sideThrust, self.sa*self.rt*self.sideThrust],
+                [self.sa*self.ht*self.sideThrust, self.ca*self.ht*self.sideThrust, -self.sa*self.rt*self.sideThrust],
+                [self.ca*self.ht*self.sideThrust, self.sa*self.ht*self.sideThrust, self.sa*self.rt*self.sideThrust],
+                [self.ca*self.ht*self.sideThrust, -self.sa*self.ht*self.sideThrust, -self.sa*self.rt*self.sideThrust],
+                [self.sa*self.ht*self.sideThrust, -self.ca*self.ht*self.sideThrust, self.sa*self.rt*self.sideThrust],
+                [-self.sa*self.ht*self.sideThrust, -self.ca*self.ht*self.sideThrust, -self.sa*self.rt*self.sideThrust],
+                [-self.ca*self.ht*self.sideThrust, -self.sa*self.ht*self.sideThrust, self.sa*self.rt*self.sideThrust],
+                [-self.ca*self.ht*self.sideThrust, self.sa*self.ht*self.sideThrust, -self.sa*self.rt*self.sideThrust],
+                [self.sa*self.ht*self.sideThrust, -self.ca*self.ht*self.sideThrust, self.sa*self.rt*self.sideThrust],
+                [-self.sa*self.ht*self.sideThrust, -self.ca*self.ht*self.sideThrust, -self.sa*self.rt*self.sideThrust],
+                [-self.ca*self.ht*self.sideThrust, -self.sa*self.ht*self.sideThrust, self.sa*self.rt*self.sideThrust],
+                [-self.ca*self.ht*self.sideThrust, self.sa*self.ht*self.sideThrust, -self.sa*self.rt*self.sideThrust],
+                [-self.sa*self.ht*self.sideThrust, self.ca*self.ht*self.sideThrust, self.sa*self.rt*self.sideThrust],
+                [self.sa*self.ht*self.sideThrust, self.ca*self.ht*self.sideThrust, -self.sa*self.rt*self.sideThrust],
+                [self.ca*self.ht*self.sideThrust, self.sa*self.ht*self.sideThrust, self.sa*self.rt*self.sideThrust],
+                [self.ca*self.ht*self.sideThrust, -self.sa*self.ht*self.sideThrust, -self.sa*self.rt*self.sideThrust],
+                [0, 0, 0]
+            ]
+        )
 
     def get_ids(self):
         return self.lm, self.client
@@ -44,8 +89,10 @@ class lunarModule:
         # Each thruster is either on or off
 
         # Convert action into a force and torque on COM
-        force = ttof * action
-        torque = ttot * action
+        #force = ttof * action
+        #torque = ttot * action
+        force = np.dot(actions, self.ttof)
+        torque = np.dot(actions, self.ttot)
 
         # Apply the force and torque
         p.applyExternalForce(objectUniqueId=self.lm, linkIndex=-1,
