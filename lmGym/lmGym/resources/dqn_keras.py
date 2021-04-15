@@ -51,7 +51,7 @@ def build_dqn(lr, n_actions, input_dims, fc1_dims, fc2_dims):
                 Activation('relu'),
                 Dense(fc2_dims),
                 Activation('relu'),
-                Dense(n_actions)])
+                Dense(n_actions), Activation('sigmoid')])
 
 
     model.compile(optimizer=Adam(lr=lr), loss='mse')
@@ -83,8 +83,8 @@ class Agent(object):
             action = np.random.choice(self.action_space)
         else:
             actions = self.q_eval.predict(state)
-            action = np.argmax(actions)
-            #action = actions > 0.5
+            #action = np.argmax(actions)
+            action = actions > 0.5
             ###MIGHT WANT TO RUN THE ABOVE LINE INSTEAD OF ARGMAX
 
         return action
