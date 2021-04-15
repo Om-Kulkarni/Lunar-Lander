@@ -82,11 +82,9 @@ class Agent(object):
             actions = np.random.choice(self.action_space)
         else:
             actions = self.q_eval.predict(state)
-            #action = np.argmax(actions)
-            actions = actions > 0.5
-            ###MIGHT WANT TO RUN THE ABOVE LINE INSTEAD OF ARGMAX
+            action = np.argmax(actions)
 
-        return actions
+        return action
 
     def learn(self):
         if self.memory.mem_cntr > self.batch_size:

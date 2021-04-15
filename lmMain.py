@@ -1,5 +1,6 @@
 import gym
 import lmGym
+import numpy as np 
 from dqn_keras import Agent
 from gym import wrappers
 
@@ -23,7 +24,12 @@ if __name__ == '__main__':
         observation = env.reset()
 
         while not done:
-            actions = agent.choose_action(observation)
+            act = agent.choose_action(observation)
+            act_string = bin(act)[2:].zfill(17)
+            act_mat  = []
+            for i in act_string:
+                act_mat.append(int(i))
+            action = np.array(act_mat)
             observation_, reward, done, info = env.step(action)
             agent.store_transitions(observation, action, state)
             observation = observation_
